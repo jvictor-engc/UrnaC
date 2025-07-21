@@ -120,8 +120,17 @@ void adicionar(struct UF **q){
         return;
     }
     printf("Digite as informacoes.\n");
-    printf("Codigo:");
-    scanf("%d", &(q[livre]->codigo));
+
+    while (1) {
+        printf("Codigo*:");
+        fflush(stdin);
+        if (scanf("%d", &(q[livre]->codigo)) == 1) break;
+
+        else {
+            printf("\nInsira um codigo valido.\n\n");
+        }
+
+    }// se o usuário digitar uma letra, entra no else, pois o scanf só lê inteiros e retorna o número de inteiros que leu. Quando não lê, retorna
 
     //testar se o codigo se repete
     for (int i = 0 ; i < MAX ; i++) {
@@ -131,20 +140,68 @@ void adicionar(struct UF **q){
         };
     }
 
+    while (1) {
+        fflush(stdin);
+        printf("Descricao*:");
 
-    fflush(stdin);
+        fgets(q[livre]->descricao, sizeof(q[livre]->descricao), stdin);
 
-    printf("Descricao:");
-    gets(q[livre]->descricao);
+        if (strcmp(q[livre]->descricao,"\n") == 0) {
+                    printf("\nCampo obrigatorio.\n");
+                    continue;
+        }
 
-    fflush(stdin);
 
-    printf("Sigla:");
-    gets(q[livre]->sigla);
+        int flag = 0;
+        for (int i = 0 ; q[livre]->descricao[i] != '\0' ; i++) {
+            if (isdigit(q[livre]->descricao[i]) != 0) {
+                printf("\nCampo nao aceita numeros\n");
+                flag++;
+                break;
+            }
+        }
+        if (flag ==1) continue;
 
-    for (int i = 0 ; q[livre]->sigla[i] != '\0' ; i++) {
-        q[livre]->sigla[i] = toupper(q[livre]->sigla[i]);
+        for (int i = 0 ; q[livre]->descricao[i] != '\0' ; i++) {
+            if (q[livre]->descricao[i] == '\n') q[livre]->descricao[i] = '\0';
+        }
+        break;
+    }// area responsavel por garantir a entrada de dados na descrção sem numeros e que seja obrigatoria
+
+    while (1) {
+        fflush(stdin);
+        printf("Sigla*:");
+
+        fgets(q[livre]->sigla, sizeof(q[livre]->sigla), stdin);
+
+        if (strcmp(q[livre]->sigla,"\n") == 0) {
+            printf("\nCampo obrigatorio.\n");
+            continue;
+        }
+
+
+        int flag = 0;
+        for (int i = 0 ; q[livre]->sigla[i] != '\0' ; i++) {
+            if (isdigit(q[livre]->sigla[i]) != 0) {
+                printf("\nCampo nao aceita numeros\n");
+                flag++;
+                break;
+            }
+        }
+        if (flag ==1) continue;
+
+        for (int i = 0 ; q[livre]->sigla[i] != '\0' ; i++) {
+            if (q[livre]->sigla[i] == '\n') q[livre]->sigla[i] = '\0';
+        }
+
+        for (int i = 0 ; q[livre]->sigla[i] != '\0' ; i++) {
+                q[livre]->sigla[i] = toupper(q[livre]->sigla[i]);
+            }
+
+        break;
     }
+
+
 
     //testar se a sigla se repete
     for (int i = 0 ; i < MAX ; i++) {
