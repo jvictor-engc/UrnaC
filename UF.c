@@ -1,5 +1,8 @@
 
 #include "UF.h"
+/*
+ * Nesse header MAX é definido como 27
+ */
 
 #include <ctype.h>
 #include <stdio.h>
@@ -10,8 +13,11 @@ void iniciar_structs(struct UF **q){
     for(int i = 0 ; i < MAX ; i++){
         q[i]->alow = 0;
     }
-}//
-
+}
+/*
+ *  recebe um ponteiro para ponteiro p, que foi criada dentro da função campo_UF.
+ *  p tem o endereço retornado pelo malloc para as 27 structs de UF.
+*/
 
 
 int achar_livre(struct UF **q){
@@ -20,6 +26,12 @@ int achar_livre(struct UF **q){
         }
         return -1;
     }
+/*
+ * Recebe o mesmo ponteiro pra ponteiro p. A função entra nas structs que foram trazidas para a ram e definem alow como 0.
+ * Alow é uma flag que diz se a struct está sendo usada.
+ * Futuramente alterar para nova função que mostra apenas as structs que foram alteradas dentro da ram para, na hora de gravar
+ * no disco, não desperdiçar tempo. IDEIA: 0-vazio 1-preenchido 2-alterado na ram.
+ */
 
 void introduzir(){
     printf("-------------------------------------------------------------------------------------------");
@@ -31,6 +43,9 @@ void introduzir(){
     printf("[5]Pesquisar UF\n");
     printf("[6]Salvar e Voltar\n\n");
 }
+/*
+ *  Introdução utilizada na função campo_uf.
+ */
 
 int find_for_code(struct UF **q, int x){
     int indice = -1;
@@ -44,6 +59,10 @@ int find_for_code(struct UF **q, int x){
 
     return indice;
 }
+/*
+ * Também recebe p e recebe um inteiro x. A função procura o código x dentro das structs trazidas para a ram e retorna o
+ * índice de localização dentro do vetor p. Quando não acha o inteiro x, ele retorna -1;
+ */
 
 int find_for_sigla(struct UF **q, char sigla[]){
     int indice = -1;
@@ -57,42 +76,93 @@ int find_for_sigla(struct UF **q, char sigla[]){
 
     return indice;
 }
+/*
+ * Faz o mesmo, mas para a string sigla.
+ */
 
 void pesquisar(struct UF **q) {
     int escolha;
     int code;
     char sigla[3];
     int indice;
+    /*
+     * Variáveis usadas dentro da função.
+     */
+
     while (1) {
         printf("\nQuem voce quer achar?\n\n");
         printf("[1]Achar por codigo\n");
         printf("[2]Achar por Sigla\n");
         printf("[3]Voltar\n");
         scanf("%d", &escolha);
+        // Introdução
 
         switch (escolha) {
-            case 1: printf("\ndigite o codigo:");
-                scanf("%d",&code);
+            // Para achar por código
+            case 1:
+
+                while (1) {
+                    printf("Digite o Codigo: ");
+
+                    fflush(stdin);
+                    if (scanf("%d", &code) == 1) break;
+
+                    printf("\nInsira um codigo valido.\n\n");
+
+                }
+                /*
+                 *  Scanf retorna a quantidade de inteiros lidos, se algo diferente disso for informado, ele retorna 0.
+                 *  Assim, a função só permite a entrada de números para a variável code.
+                 */
+
+
                 indice = find_for_code(q, code);
                 if (indice == -1) {
                     printf("\nCodigo nao cadastrado\n");
                     break;
-                }
-                // mostrar a UF com determinado codigo
+                }// Caso a função find_for_code não ache a variável code, esse if retorna para a introdução da função.
+
+
+
                 printf("\ncodigo: %02d\n", (q[indice]->codigo));
                 printf("Descricao: %s\n", q[indice]->descricao);
                 printf("Sigla: %s\n", q[indice]->sigla);
                 printf("\n");
+                // mostrar a UF com determinado código.
 
                 break;
-            case 2: printf("\nDigite a sigla:\n");
-                fflush(stdin);
-                gets(sigla);
 
-                char *string = sigla;
-                for (int i = 0 ; sigla[i] != '\0' ; i++) {
-                    sigla[i] = toupper(sigla[i]);
-                }
+            // Para achar por sigla
+            case 2:
+                while (1) {
+                    fflush(stdin);
+                    printf("Digite a Sigla: ");
+
+                    fgets(sigla, sizeof(sigla), stdin);
+
+
+
+
+                    int flag = 0;
+                    for (int i = 0 ; sigla[i] != '\0' ; i++) {
+                        if (isdigit(sigla[i]) != 0) {
+                            printf("\nCampo nao aceita numeros\n");
+                            flag++;
+                            break;
+                        }
+                    }
+                    if (flag ==1) continue;
+
+                    for (int i = 0 ; sigla[i] != '\0' ; i++) {
+                        if (sigla[i] == '\n') sigla[i] = '\0';
+                    }
+
+                    for (int i = 0 ; sigla[i] != '\0' ; i++) {
+                        sigla[i] = toupper(sigla[i]);
+                    }
+
+                    break;
+                }// refinando para ser obrigatorio e não aceitar numeros
 
                 indice = find_for_sigla(q, sigla);
                 if (indice == -1) {
@@ -234,7 +304,7 @@ void excluir(struct UF **q){
 
     while (1) {
         int escolha;
-        char saigla[3];
+        char sigla[3];
         int yesnot;
         int indice;
         int code;
@@ -281,14 +351,14 @@ void excluir(struct UF **q){
                     fflush(stdin);
                     printf("Digite a Sigla: ");
 
-                    fgets(saigla, sizeof(saigla), stdin);
+                    fgets(sigla, sizeof(sigla), stdin);
 
 
 
 
                     int flag = 0;
-                    for (int i = 0 ; saigla[i] != '\0' ; i++) {
-                        if (isdigit(saigla[i]) != 0) {
+                    for (int i = 0 ; sigla[i] != '\0' ; i++) {
+                        if (isdigit(sigla[i]) != 0) {
                             printf("\nCampo nao aceita numeros\n");
                             flag++;
                             break;
@@ -296,19 +366,19 @@ void excluir(struct UF **q){
                     }
                     if (flag ==1) continue;
 
-                    for (int i = 0 ; saigla[i] != '\0' ; i++) {
-                        if (saigla[i] == '\n') saigla[i] = '\0';
+                    for (int i = 0 ; sigla[i] != '\0' ; i++) {
+                        if (sigla[i] == '\n') sigla[i] = '\0';
                     }
 
-                    for (int i = 0 ; saigla[i] != '\0' ; i++) {
-                        saigla[i] = toupper(saigla[i]);
+                    for (int i = 0 ; sigla[i] != '\0' ; i++) {
+                        sigla[i] = toupper(sigla[i]);
                     }
 
                     break;
                 }// refinando para ser obrigatorio e não aceitar numeros
 
 
-                indice = find_for_sigla(q, saigla);
+                indice = find_for_sigla(q, sigla);
                 if(indice == -1) { printf("Sigla nao cadastrada\n"); break;}
 
                 printf("\ncodigo: %02d\n", (q[indice]->codigo));
