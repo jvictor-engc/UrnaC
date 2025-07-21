@@ -246,10 +246,21 @@ void excluir(struct UF **q){
         switch (escolha) {
             case 1:
 
-                printf("Digite o Codigo: ");
-                scanf("%d", &code);
+
+                while (1) {
+                    printf("Digite o Codigo: ");
+                    fflush(stdin);
+                    if (scanf("%d", &code) == 1) break;
+
+                    else {
+                        printf("\nInsira um codigo valido.\n\n");
+                    }
+
+                }// se o usuário digitar uma letra, entra no else, pois o scanf só lê inteiros e retorna o número de inteiros que leu. Quando não lê, retorna 0
+
+
                 indice = find_for_code(q, code);
-                if(indice == -1) { printf("Codigo nao cadastrado\n"); break;}
+                if(indice == -1) { printf("\nCodigo nao cadastrado\n\n"); break;}
 
                 printf("\ncodigo: %02d\n", (q[indice]->codigo));
                 printf("Descricao: %s\n", q[indice]->descricao);
@@ -266,9 +277,37 @@ void excluir(struct UF **q){
                 break;
             case 2:
 
-                printf("Digite a Sigla: ");
-                fflush(stdin);
-                scanf("%s", saigla);
+                while (1) {
+                    fflush(stdin);
+                    printf("Digite a Sigla: ");
+
+                    fgets(saigla, sizeof(saigla), stdin);
+
+
+
+
+                    int flag = 0;
+                    for (int i = 0 ; saigla[i] != '\0' ; i++) {
+                        if (isdigit(saigla[i]) != 0) {
+                            printf("\nCampo nao aceita numeros\n");
+                            flag++;
+                            break;
+                        }
+                    }
+                    if (flag ==1) continue;
+
+                    for (int i = 0 ; saigla[i] != '\0' ; i++) {
+                        if (saigla[i] == '\n') saigla[i] = '\0';
+                    }
+
+                    for (int i = 0 ; saigla[i] != '\0' ; i++) {
+                        saigla[i] = toupper(saigla[i]);
+                    }
+
+                    break;
+                }// refinando para ser obrigatorio e não aceitar numeros
+
+
                 indice = find_for_sigla(q, saigla);
                 if(indice == -1) { printf("Sigla nao cadastrada\n"); break;}
 
