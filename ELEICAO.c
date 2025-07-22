@@ -49,8 +49,43 @@ int find_for_struct(struct ELEICAO **q,int year, int code) {
     return -1;
 }
 
+int verifica_cod_uf(int code) {
+    struct uf {
+        int a;
+        int b;
+        char c[20];
+        char d[3];
+    };
+    struct uf *p = malloc(sizeof(struct uf));
+
+    FILE *U = fopen("ufs", "rb+");
+    if(U == NULL) U = fopen("ufs", "wb+");
+    if(U == NULL) printf("erro ao abrir arquivo");// abro o arquivo de nome ufs
+
+    int flag = 0;
+    for (int i = 0 ; 1 ; i++) {
+        fseek(U, i * sizeof(struct uf), SEEK_SET);
+        int count = fread(p, sizeof(struct uf), 1, U);
+
+        if (count == 0) {
+            free(p);
+            fclose(U);
+            return 0;
+        }
+
+        if (p->b == code) {
+            flag = 1;
+            break;
+        }
+    }
+    free(p);
+    fclose(U);
+
+    return flag;
+}
+
 void adicionar_elc(struct ELEICAO **q){
-    int livre = achar_livre(q);
+    int livre = achar_livre_elc(q);
     if(livre == -1) {
         printf("Lista Cheia\n");
         return;
@@ -62,10 +97,17 @@ void adicionar_elc(struct ELEICAO **q){
     fflush(stdin);
     scanf("%d", &(q[livre]->ano));
 
-    printf("Codigo da UF*:");
-    fflush(stdin);
-    scanf("%d", &(q[livre]->codigo_uf));
+    while (1) {
+        printf("Codigo da UF*:");
+        fflush(stdin);
+        scanf("%d", &(q[livre]->codigo_uf));
 
+        if ( !verifica_cod_uf(q[livre]->codigo_uf) ) {
+            printf("Codigo da UF nao existe\n");
+            return;
+        }
+        break;
+    }
     int indice = find_for_struct(q, (q[livre]->ano), q[livre]->codigo_uf);
 
     if (indice != -1) {
@@ -100,8 +142,6 @@ void mostrar_elc(struct ELEICAO **q) {
     if(flag == 0) printf("\n\nNao ha ELEICOES cadastradas\n\n");
 }
 
-
-
 void excluir_elc(struct ELEICAO **q) {
 
     while (1) {
@@ -120,7 +160,7 @@ void excluir_elc(struct ELEICAO **q) {
         indice = find_for_struct(q, year, code);
         if (indice == -1) {
             printf("\nSem essa eleicao.\n");
-            continue;
+            return;
         }
         printf("Ano: %d\n", (q[indice]->ano));
         printf("Codigo UF: %d\n", (q[indice]->codigo_uf));
@@ -137,6 +177,12 @@ void excluir_elc(struct ELEICAO **q) {
     }
 
 }
+
+void alterar_elc(struct ELEICAO **q) {
+
+}//fazer ainda
+
+void pesquisar_elc(struct ELEICAO **q) {}//fazer ainda
 
 void campo_ELEICAO() {
     struct ELEICAO *p[5];

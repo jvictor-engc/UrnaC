@@ -2,6 +2,7 @@
 #include "UF.h"
 #include "PESSOA.h"
 #include "ELEICAO.h"
+#include "VOTO.h"
 
 // abrir arquivo
 //fazer malloc
@@ -12,6 +13,7 @@
 
 int main(){
     int escolha;
+
     printf("\n-----------------------------------------ELEICOES------------------------------------------\n\n");
 
 
@@ -32,9 +34,9 @@ int main(){
                 break;
             case 2: campo_ELEICAO();
                 break;
-            case 4:
-                campo_PESSOA();
+            case 4: campo_PESSOA();
                 break;
+            case 5: campo_VOTO();
             case 7:
                 return 0;
             default:
