@@ -209,7 +209,7 @@ void adicionar(struct UF **q){
 
     //testar se o codigo se repete
     for (int i = 0 ; i < MAX ; i++) {
-        if ((q[i]->alow == 1)&(q[i]->codigo == q[livre]->codigo)){
+        if ((q[i]->alow != 0)&(q[i]->codigo == q[livre]->codigo)){
             printf("\n\nERRO: O Codigo ja esta em uso\n\n");
             return;
         };
@@ -664,12 +664,6 @@ void campo_UF(){
     if(U == NULL) printf("erro ao abrir arquivo");// abro o arquivo de nome ufs
 
 
-    /*int pos;
-    int num;
-    fseek(U, 0, SEEK_END);
-    pos = ftell(U);
-    num = pos / sizeof(struct UF);
-    // mostra a quantidade de structs que tem no arquivo*/
 
     fseek(U, 0, SEEK_SET);
     for (int i = 0; i < MAX; i++){

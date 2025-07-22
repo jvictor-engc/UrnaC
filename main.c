@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include "UF.h"
+#include "PESSOA.h"
+#include "ELEICAO.h"
 
 // abrir arquivo
 //fazer malloc
@@ -27,6 +29,11 @@ int main(){
         switch (escolha) {
             case 1:
                 campo_UF();
+                break;
+            case 2: campo_ELEICAO();
+                break;
+            case 4:
+                campo_PESSOA();
                 break;
             case 7:
                 return 0;
