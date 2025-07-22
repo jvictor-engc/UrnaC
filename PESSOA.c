@@ -93,7 +93,7 @@ void mostrar_uma(struct PESSOA *p[]) {
 }
 
 void alterar_pessoa(struct PESSOA *p[]) {
-    int choice; int pessoa; int aux;  char CPF[20]; char titulo[25]; char telefone[20];
+    int choice; int pessoa; int aux;  char CPF[20]; char titulo[25]; char telefone[20];char endereco[100] , nascimento[11];
     printf("Digite o CPF ATUAL da pessoa a ser alterada: ");
     fflush(stdin);
     gets(CPF);
@@ -157,7 +157,6 @@ void alterar_pessoa(struct PESSOA *p[]) {
             return;
             case 5:
             //(*/ω＼*) para-... isso também não é key ಥ_ಥ
-                char endereco[100];
                 printf("Digite o NOVO ENDERECO: ");
                 fflush(stdin);
                 gets(endereco);
@@ -166,7 +165,6 @@ void alterar_pessoa(struct PESSOA *p[]) {
             return;
             case 6:
                 //Será que a gente nasceu no mesmo dia...? (✿ ◕‿◕ ✿)
-                char nascimento[11];
                 printf("Digite a NOVA DATA de NASCIMENTO: ");
                 fflush(stdin);
                 gets(nascimento);
