@@ -33,6 +33,7 @@ int achar_livre(struct UF **q){
  * no disco, não desperdiçar tempo. IDEIA: 0-vazio 1-preenchido 2-alterado na ram.
  */
 
+
 void introduzir(){
     printf("-------------------------------------------------------------------------------------------");
     printf("\n\nO que deseja fazer?\n\n");
@@ -47,11 +48,12 @@ void introduzir(){
  *  Introdução utilizada na função campo_uf.
  */
 
+
 int find_for_code(struct UF **q, int x){
     int indice = -1;
 
     for(int i = 0 ; i < MAX ; i++) {
-            if ((q[i]->codigo == x)&(q[i]->alow == 1)) {
+            if ((q[i]->codigo == x)&(q[i]->alow != 0)) {
                 indice = i;
                 break;
             }
@@ -64,11 +66,12 @@ int find_for_code(struct UF **q, int x){
  * índice de localização dentro do vetor p. Quando não acha o inteiro x, ele retorna -1;
  */
 
+
 int find_for_sigla(struct UF **q, char sigla[]){
     int indice = -1;
 
     for(int i = 0 ; i < MAX ; i++) {
-            if ((!strcmp(q[i]->sigla, sigla))&(q[i]->alow ==1)) {
+            if ((!strcmp(q[i]->sigla, sigla))&(q[i]->alow != 0)) {
                 indice = i;
                 break;
             }
@@ -79,6 +82,7 @@ int find_for_sigla(struct UF **q, char sigla[]){
 /*
  * Faz o mesmo, mas para a string sigla.
  */
+
 
 void pesquisar(struct UF **q) {
     int escolha;
@@ -140,9 +144,6 @@ void pesquisar(struct UF **q) {
 
                     fgets(sigla, sizeof(sigla), stdin);
 
-
-
-
                     int flag = 0;
                     for (int i = 0 ; sigla[i] != '\0' ; i++) {
                         if (isdigit(sigla[i]) != 0) {
@@ -150,19 +151,19 @@ void pesquisar(struct UF **q) {
                             flag++;
                             break;
                         }
-                    }
-                    if (flag ==1) continue;
+                    }// Funçao isdigit analisa se o caractere é um decimal, se sim, ele retorna diferente de 0
+                    if (flag ==1) continue;// Esse if faz com que o while recomece.
 
                     for (int i = 0 ; sigla[i] != '\0' ; i++) {
                         if (sigla[i] == '\n') sigla[i] = '\0';
-                    }
+                    }// Tiramos o \n da string
 
                     for (int i = 0 ; sigla[i] != '\0' ; i++) {
                         sigla[i] = toupper(sigla[i]);
-                    }
+                    }//Deixamos tudo maiúsculo.
 
                     break;
-                }// refinando para ser obrigatorio e não aceitar numeros
+                }
 
                 indice = find_for_sigla(q, sigla);
                 if (indice == -1) {
@@ -182,6 +183,10 @@ void pesquisar(struct UF **q) {
         }
     }
 }
+/*
+ * recebe p
+ */
+
 
 void adicionar(struct UF **q){
     int livre = achar_livre(q);
@@ -281,14 +286,15 @@ void adicionar(struct UF **q){
         };
     }
 
-    (q[livre]->alow) = 1;
+    (q[livre]->alow) = 2;
 }
+
 
 void mostrar(struct UF **q){
     int flag = 0;
     printf("-------------------------------------------------------------------------------------------");
     for (int i = 0; i < MAX; i++){
-        if((q[i]->alow) == 1){
+        if((q[i]->alow) != 0){
             printf("\ncodigo: %02d\n", (q[i]->codigo));
             printf("Descricao: %s\n", q[i]->descricao);
             printf("Sigla: %s\n", q[i]->sigla);
@@ -298,6 +304,9 @@ void mostrar(struct UF **q){
     }
     if(flag == 0) printf("\n\nNao ha UFs cadastradas\n\n");
 }
+/*
+ * O que for diferente de zero no alow, ou seja, 1(preenchido) e 2(preenchido e alterado) é mostrado.
+ */
 
 void excluir(struct UF **q){
 
@@ -406,16 +415,27 @@ void alterar(struct UF **q) {
         int code;int new_choice;int new_code;char new_desc[15];char new_sigla[3];char sigla[3];int flag;
         int escolha;
         int indice;
+        // Variáveis usadas
+
         printf("\nQuem voce quer alterar?\n");
         printf("[1]Achar por Codigo\n");
         printf("[2]Achar por Sigla\n");
         printf("[3]Voltar\n");
         scanf("%d", &escolha);
+        //introdução do primeiro switch
 
         switch (escolha) { //alterar
             case 1:
-                printf("\nDigite o codigo:");
-                scanf("%d", &code);
+                while (1) {
+                    printf("Digite o Codigo:");
+                    fflush(stdin);
+                    if (scanf("%d", &code) == 1) break;
+
+                    else {
+                        printf("\nInsira um codigo valido.\n\n");
+                    }
+
+                }// se o usuário digitar uma letra, entra no else, pois o scanf só lê inteiros e retorna o número de inteiros que leu. Quando não lê, retorna
                 indice  = find_for_code(q, code);
                 if (indice == -1) { printf("Codigo nao cadastrado\n"); break;}
 
@@ -425,7 +445,7 @@ void alterar(struct UF **q) {
                 printf("Sigla: %s\n", q[indice]->sigla);
                 printf("\n");
 
-                //interage com usuario
+                //interage com usuario para segundo switch
                 printf("\nO que deseja alterar dessa UF?\n");
                 printf("[1]Codigo\n");
                 printf("[2]Descricao\n");
@@ -462,7 +482,7 @@ void alterar(struct UF **q) {
                         q[indice]->codigo = new_code;
                         //caso nenhum if seja acionado
                         printf("\nUF alterada com sucesso\n");
-
+                        q[indice]->alow = 2;// pois foi alterado
                         break;
                     case 2:
                         printf("\nDigite a nova descricao:");
@@ -473,6 +493,7 @@ void alterar(struct UF **q) {
                         strcpy(q[indice]->descricao,new_desc);
 
                         printf("\nUF alterada com sucesso\n");
+                        q[indice]->alow = 2;// pois foi alterado
                         break;
                     case 3://OK!!!!!!!!!!!!!!
                         printf("\nDigite a nova sigla:");
@@ -506,9 +527,12 @@ void alterar(struct UF **q) {
                         //caso nenhum if seja ativado, a new_sigla vai para dentro da struct
 
                         printf("\nUF alterada com sucesso\n");
+                        q[indice]->alow = 2;// pois foi alterado
                         break;
                     case 4:
                         break;
+
+                    default: printf("\nOpcao invalida\n");
                 }
 
                 break;
@@ -568,7 +592,7 @@ void alterar(struct UF **q) {
                         q[indice]->codigo = new_code;
                         //caso nenhum if seja acionado
                         printf("\nUF alterada com sucesso\n");
-
+                        q[indice]->alow = 2;// pois foi alterado
                         break;
                     case 2:
                         printf("\nDigite a nova descricao:");
@@ -579,6 +603,7 @@ void alterar(struct UF **q) {
                         strcpy(q[indice]->descricao,new_desc);
 
                         printf("\nUF alterada com sucesso\n");
+                        q[indice]->alow = 2;// pois foi alterado
                         break;
                     case 3://OK!!!!!!!!!!!!!!
                         printf("\nDigite a nova sigla:");
@@ -612,6 +637,7 @@ void alterar(struct UF **q) {
                         //caso nenhum if seja ativado, a new_sigla vai para dentro da struct
 
                         printf("\nUF alterada com sucesso\n");
+                        q[indice]->alow = 2;// pois foi alterado
                         break;
                     case 4:
                         break;
@@ -648,7 +674,7 @@ void campo_UF(){
     fseek(U, 0, SEEK_SET);
     for (int i = 0; i < MAX; i++){
         fread(p[i], sizeof(struct UF), 1, U);
-    }// le para o malloc
+    }// lê para a memória alocada o tamanho de uma struct UF uma vez do arquivo U
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -679,7 +705,11 @@ void campo_UF(){
             case 6:
             fseek(U, 0, SEEK_SET);
             for (int i = 0; i < MAX; i++){
-            fwrite(p[i], sizeof(struct UF), 1, U);
+                if (p[i]->alow == 2) {
+                    p[i]->alow = 1;//quando salvo, deixa de ser tratado como alterado
+                    fseek(U, i * sizeof(struct UF), SEEK_SET);
+                    fwrite(p[i], sizeof(struct UF), 1, U);
+                }
             }
             for(int i = 0 ; i < MAX ; i++) free(p[i]);
             fclose(U); 
