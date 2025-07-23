@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#define MAX 20
 
 
 
@@ -49,6 +48,7 @@ int search_titulo(char titulo[25], struct PESSOA *p[]) {
             qts_cadas++;
         }
     }
+
     //MAJOR bruhh moment, o que voce está olhando aqui, se claramente é igual ao search_by_CPF...? (ㆆ_ㆆ)
     while ( !flag && counter != (qts_cadas + 1)) {
         if (!(strcmp(p[counter]->titulo,titulo))&&(p[counter]->allow == 1)) {
@@ -84,6 +84,10 @@ void mostrar_uma(struct PESSOA *p[]) {
     printf("FONE: %s\n",p[counter]->fone);
     printf("ENDERECO: %s\n",p[counter]->endereco);
     printf("DATA NASCAC: %s\n",p[counter]->data_nascimento);
+    if (p[counter]->comparecimento == 1)
+        printf("Comparecimento: REGISTRADO\n");
+    else
+        printf("Comparecimento: NAO REGISTRADO!\n");
     printf("-------------------------\n\n");
     printf("Deseja ver mais alguma pessoa? (S/N)\n");
     scanf("%c", &aux);
@@ -93,7 +97,7 @@ void mostrar_uma(struct PESSOA *p[]) {
 }
 
 void alterar_pessoa(struct PESSOA *p[]) {
-    int choice; int pessoa; int aux;  char CPF[20]; char titulo[25]; char telefone[20];char endereco[100] , nascimento[11];
+    int choice; int pessoa;char nascimento[11]; int aux;  char CPF[20]; char titulo[25]; char telefone[20]; char endereco[100];
     printf("Digite o CPF ATUAL da pessoa a ser alterada: ");
     fflush(stdin);
     gets(CPF);
@@ -180,7 +184,7 @@ void alterar_pessoa(struct PESSOA *p[]) {
 void remover_pessoa(struct PESSOA *p[]) {
     char titulo[25]; int counter; char flag2;
 
-        printf("Digite o TITULO da pessoa a ser removida: ");
+        printf("Digite o CPF da pessoa a ser removida: ");
         fflush(stdin);
         gets(titulo);
         counter = search_titulo(titulo, p);
@@ -255,6 +259,7 @@ void inserir_pessoa(struct PESSOA *p[]) {
             printf("Digite o Titulo: ");
             fflush(stdin);
             gets(p[i]->titulo);
+
             //laço para comparar titulos e verificar se ja foi registrado, o for deve encontrar somente um titulo repetido(que é o próprio digitado), caso tenha mais de um, ele dá erro
                 for (int k = 0; k <= MAX; k++) {
                     if (strcmp(p[i]->titulo, p[k]->titulo) == 0) {
@@ -302,8 +307,10 @@ void inserir_pessoa(struct PESSOA *p[]) {
 
 //funcao para iniciar os ALLOWs das structs em 0
 void iniciar_pessoas(struct PESSOA *p[]) {
-    for (int i = 0; i < MAX; i++)
+    for (int i = 0; i < MAX; i++) {
         p[i]->allow = 0;
+        p[i]->comparecimento = 0;
+    }
 }
 
 //funcao para listar todas as pessoas cadastradas, caso nao tenha ninguem cadastrado ele avisa
@@ -318,6 +325,10 @@ void mostrar_todas(struct PESSOA *p[]) {
             printf("Telefone: %s\n", p[i]->fone);
             printf("Endereco: %s\n", p[i]->endereco);
             printf("Data nascimento: %s\n", p[i]->data_nascimento);
+            if (p[i]->comparecimento == 1)
+                printf("Comparecimento: REGISTRADO\n");
+            else
+                printf("Comparecimento: NAO REGISTRADO\n");
             printf("--------------------------------\n\n");
             }else aux++;
         }
