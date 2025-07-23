@@ -2,19 +2,21 @@
 #define MAX 27
 #endif
 
-//generico
-void iniciar_structs();
-void abrir_criar_arq();
-
-
-//UF
-int achar_livre();
-void adicionar();
 struct UF{
     int alow;
     int codigo;
     char descricao[20];
     char sigla[3];
 };
+void iniciar_structs();
+int achar_livre();
+void introduzir();
+void find_for_code();
+void find_for_sigla();
+void adicionar();
+void pesquisar();
+void adicionar();
+void exluir();
+void alterar();
 void campo_UF();
 void mostrar();
