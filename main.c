@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include "UF.h"
 #include "PESSOA.h"
-#include "Candidato.h"
+#include "ELEICAO.h"
+#include "VOTO.h"
 
 // abrir arquivo
 //fazer malloc
@@ -12,11 +13,9 @@
 
 int main(){
     int escolha;
-    printf("\n-----------------------------------------ELEICOES------------------------------------------\n\n");
-
 
     while(1){
-
+        printf("\n-----------------------------------------ELEICOES------------------------------------------\n\n");
         printf("[1]UF\n");
         printf("[2]ELEICAO\n");
         printf("[3]CANDIDATO\n");
@@ -26,18 +25,17 @@ int main(){
         printf("[7]Sair\n\n");
         printf("Escolha a area de informacao:");
         scanf(" %d", &escolha);
-
-
         switch (escolha) {
-            case 1:
-                campo_UF();
+            case 1:campo_UF();
+                break;
+            case 2: campo_ELEICAO();
                 break;
             case 3:
-                campo_candidato();
                 break;
-			case 4:
-				campo_PESSOA();
-				break;
+            case 4: campo_PESSOA();
+                break;
+            case 5: campo_VOTO();
+                break;
             case 7:
                 return 0;
             default:

@@ -180,7 +180,7 @@ void alterar_pessoa(struct PESSOA *p[]) {
 void remover_pessoa(struct PESSOA *p[]) {
     char titulo[25]; int counter; char flag2;
 
-        printf("Digite o CPF da pessoa a ser removida: ");
+        printf("Digite o TITULO da pessoa a ser removida: ");
         fflush(stdin);
         gets(titulo);
         counter = search_titulo(titulo, p);

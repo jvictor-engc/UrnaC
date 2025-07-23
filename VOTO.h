@@ -7,3 +7,4 @@ struct VOTO {
     int numero_candidato;
     char dta_hora[20];
 };
+void campo_VOTO();

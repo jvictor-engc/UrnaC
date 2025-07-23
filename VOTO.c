@@ -6,9 +6,8 @@
 
 void introduzir_v() {
     printf("[1]Adicionar Votos\n");
-    printf("[2]Mostrar Votos de uma eleicao\n");// ordenar por candidato
-    printf("[3]Mostrar quantidade de Votos por ano\n");//e ordenar por UF
-    printf("[4]Salvar e Voltar\n");
+    printf("[2]Mostrar Votos\n");
+    printf("[5]Salvar e Voltar\n");
 }
 
 int achar_livre_v(struct VOTO **q){
@@ -16,41 +15,6 @@ int achar_livre_v(struct VOTO **q){
         if((q[i]->alow) == 0) return i;
     }
     return -1;
-}
-
-int verifica_cod_uf_(int code) {
-    struct uf {
-        int a;
-        int b;
-        char c[20];
-        char d[3];
-    };
-    struct uf *p = malloc(sizeof(struct uf));
-
-    FILE *U = fopen("ufs", "rb+");
-    if(U == NULL) U = fopen("ufs", "wb+");
-    if(U == NULL) printf("erro ao abrir arquivo");// abro o arquivo de nome ufs
-
-    int flag = 0;
-    for (int i = 0 ; 1 ; i++) {
-        fseek(U, i * sizeof(struct uf), SEEK_SET);
-        int count = fread(p, sizeof(struct uf), 1, U);
-
-        if (count == 0) {
-            free(p);
-            fclose(U);
-            return 0;
-        }
-
-        if (p->b == code) {
-            flag = 1;
-            break;
-        }
-    }
-    free(p);
-    fclose(U);
-
-    return flag;
 }
 
 void adicionar_v(struct VOTO **q) {
@@ -61,31 +25,62 @@ void adicionar_v(struct VOTO **q) {
     }
     printf("Digite as informacoes.\n");
 
-    while (1) {
-        printf("Insira o Ano do voto: ");
-        int year;
-        scanf("%d", &year);
 
-    }
+    printf("Insira o Ano do voto: ");
+    scanf("%d", &q[livre]->ano);
 
-    while (1) {
-        printf("Codigo da UF*:");
-        fflush(stdin);
-        scanf("%d", &(q[livre]->codigo_uf));
+    printf("Insira codigo da UF: ");
+    scanf("%d", &q[livre]->codigo_uf);
 
-        if ( !verifica_cod_uf_(q[livre]->codigo_uf) ) {
-            printf("Codigo da UF nao existe\n");
-            return;
-        }
-        break;
+    printf("Insira o numero do candidato: ");
+    scanf("%d", &q[livre]->numero_candidato);
 
-    }
-}///parei aqui
+    printf("insira data e hora: ");
+    char data_hora[20];
+    fflush(stdin);
+    gets(data_hora);
+
+    (q[livre]->alow) = 2;
+}
 
 void iniciar_structs_v(struct VOTO **q) {
     for(int i = 0 ; i < MAX_V ; i++) {
         q[i]->alow = 0;
     }
+}
+
+int find_for_ano_code(struct VOTO **q, int y, int c) {
+    for (int i = 0; i < MAX_V; i++) {
+        if ((q[i]->alow != 0) && (q[i]->ano == y) && (q[i]->codigo_uf == c)) {
+            return i;
+        }
+    }
+}
+
+void mostrar_v(struct VOTO **q) {
+    printf("Digite o Ano: ");
+    int year;
+    scanf("%d", &year);
+
+    printf("Digite o codigo da UF: ");
+    int codigo;
+    scanf("%d", &codigo);
+
+    printf("Digite o numero do candidato: ");
+    int numero;
+    scanf("%d", &numero);
+
+    printf("Votos do Candidato %d, no Ano %d e na UF %d\n", numero, year, codigo);
+    int count = 0;
+    for (int i = 0; i < MAX_V; i++) {
+        if ((q[i]->alow != 0) && (q[i]->ano == year) && (q[i]->codigo_uf == codigo) && (q[i]->numero_candidato == numero)) {
+            printf("voto: %d, %d, %d.\n", year, codigo, numero);
+            count++;
+        }
+    }
+    printf("Numero total de votos: %d\n\n", count);
+
+
 }
 
 void campo_VOTO() {
@@ -108,19 +103,21 @@ void campo_VOTO() {
     ///////////////////////////////////////////////////////////////////////////////////////
 
     while(1) {
-        introduzir();
+        introduzir_v();
 
         int escolha;
         scanf("%d", &escolha);
 
         switch (escolha) {
-            case 1:
+            case 1:adicionar_v(p);
                 break;
-            case 2:
+            case 2: mostrar_v(p);
                 break;
             case 3:
                 break;
             case 4:
+                break;
+            case 5:
                 fseek(V, 0, SEEK_SET);
                 for (int i = 0; i < MAX_V; i++){
                     if (p[i]->alow == 2) {
@@ -130,7 +127,7 @@ void campo_VOTO() {
                     }
                 }
                 for(int i = 0 ; i < MAX_V ; i++) free(p[i]);
-                fclose(U);
+                fclose(V);
                 return;
 
             default: printf("\nOpcao invalida\n");
