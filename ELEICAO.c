@@ -67,6 +67,7 @@ int verifica_cod_uf(int code) {
         fseek(U, i * sizeof(struct uf), SEEK_SET);
         int count = fread(p, sizeof(struct uf), 1, U);
 
+
         if (count == 0) {
             free(p);
             fclose(U);
@@ -231,6 +232,10 @@ void campo_ELEICAO() {
                 for (int i = 0; i < 5; i++){
                     if (p[i]->alow == 2) {
                         p[i]->alow = 1;//quando salvo, deixa de ser tratado como alterado
+                        fseek(E, i * sizeof(struct ELEICAO), SEEK_SET);
+                        fwrite(p[i], sizeof(struct ELEICAO), 1, E);
+                    }
+                    else {
                         fseek(E, i * sizeof(struct ELEICAO), SEEK_SET);
                         fwrite(p[i], sizeof(struct ELEICAO), 1, E);
                     }

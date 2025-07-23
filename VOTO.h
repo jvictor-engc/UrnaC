@@ -8,3 +8,4 @@ struct VOTO {
     char dta_hora[20];
 };
 void campo_VOTO();
+

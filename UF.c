@@ -704,6 +704,10 @@ void campo_UF(){
                     fseek(U, i * sizeof(struct UF), SEEK_SET);
                     fwrite(p[i], sizeof(struct UF), 1, U);
                 }
+                else {
+                    fseek(U, i * sizeof(struct UF), SEEK_SET);
+                    fwrite(p[i], sizeof(struct UF), 1, U);
+                }
             }
             for(int i = 0 ; i < MAX ; i++) free(p[i]);
             fclose(U); 

@@ -17,6 +17,43 @@ int achar_livre_v(struct VOTO **q){
     return -1;
 }
 
+int verificar(int ano, int code) {
+    struct eleicao {
+        int a;
+        int b;
+        int c;
+        char d[20];
+    };
+    struct eleicao *p = malloc(sizeof(struct eleicao));
+
+    FILE *E = fopen("elc", "rb+");
+    if(E == NULL) E = fopen("elc", "wb+");
+    if(E == NULL) printf("erro ao abrir arquivo");// abro o arquivo de nome elc
+
+    int flag = 0;
+    for (int i = 0 ; 1 ; i++) {
+        fseek(E, i * sizeof(struct eleicao), SEEK_SET);
+        int count = fread(p, sizeof(struct eleicao), 1, E);
+
+
+
+        if (count == 0) {
+            free(p);
+            fclose(E);
+            return 0;
+        }
+
+        if ((p->b ==ano) && (p->c ==code)) {
+            flag = 1;
+            break;
+        }
+    }
+    free(p);
+    fclose(E);
+
+    return flag;
+}// se o fread retornar zero, significa que ele chegou ao final do arquivo e não encontrou o code. Assim que ele encontrar ele retorna 1.
+
 void adicionar_v(struct VOTO **q) {
     int livre = achar_livre_v(q);
     if(livre == -1) {
@@ -31,6 +68,12 @@ void adicionar_v(struct VOTO **q) {
 
     printf("Insira codigo da UF: ");
     scanf("%d", &q[livre]->codigo_uf);
+
+    if (!verificar(q[livre]->ano, q[livre]->codigo_uf)) {
+        printf("\n\nConjunto Eleicao nao existe\n\n");
+        return;
+    }
+    printf("Conjunto eleicao existe\n\n");
 
     printf("Insira o numero do candidato: ");
     scanf("%d", &q[livre]->numero_candidato);

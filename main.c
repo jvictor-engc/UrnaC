@@ -1,4 +1,6 @@
 #include <stdio.h>
+
+#include "Candidato.h"
 #include "UF.h"
 #include "PESSOA.h"
 #include "ELEICAO.h"
@@ -30,7 +32,7 @@ int main(){
                 break;
             case 2: campo_ELEICAO();
                 break;
-            case 3:
+            case 3: campo_candidato();
                 break;
             case 4: campo_PESSOA();
                 break;

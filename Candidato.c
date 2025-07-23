@@ -28,10 +28,10 @@ int verificar_algarismos(int numero) {
         qtd++;
         aux = aux / 10;
     }
-    if (qtd != 2)
-        return 1;
-    else
+    if ((qtd == 1) || (qtd == 2))
         return 0;
+    else
+        return 1;
 }
 
 
@@ -89,6 +89,85 @@ void excluir_candidato(struct candidato *c[]) {
         printf("Exclusao cancelada!"); return;
 }
 
+int verificar_v(int ano, int code) {
+    struct eleicao {
+        int a;
+        int b;
+        int c;
+        char d[20];
+    };
+    struct eleicao *p = malloc(sizeof(struct eleicao));
+
+    FILE *E = fopen("elc", "rb+");
+    if(E == NULL) E = fopen("elc", "wb+");
+    if(E == NULL) printf("erro ao abrir arquivo");// abro o arquivo de nome elc
+
+    int flag = 0;
+    for (int i = 0 ; 1 ; i++) {
+        fseek(E, i * sizeof(struct eleicao), SEEK_SET);
+        int count = fread(p, sizeof(struct eleicao), 1, E);
+
+        if (p->a == 0) continue;
+
+        if (count == 0) {
+            free(p);
+            fclose(E);
+            return 0;
+        }
+
+        if ((p->b == ano) && (p->c == code)) {
+            flag = 1;
+            break;
+        }
+    }
+    free(p);
+    fclose(E);
+
+    return flag;
+}// se o fread retornar zero, significa que ele chegou ao final do arquivo e não encontrou o code. Assim que ele encontrar ele retorna 1.
+
+int verificar_cpf(char cpf[]) {
+    struct pessoa {
+        int a;
+        char b[20];
+        char c[25];
+        char d[50];
+        char e[20];
+        char f[100];
+        char g[11];
+    };
+
+    struct pessoa *p = malloc(sizeof(struct pessoa));
+
+    FILE *f = fopen("pessoas", "rb+");
+    if (f == NULL) f = fopen("pessoas", "wb+");
+    if (f == NULL) {
+        printf("erro ao abrir arquivo, tente novamente\n");
+        return;
+    }
+
+    int flag = 0;
+    for (int i = 0 ; 1 ; i++) {
+        fseek(f, i * sizeof(struct pessoa), SEEK_SET);
+        int count = fread(p, sizeof(struct pessoa), 1, f);
+
+        if (count == 0) {
+            free(p);
+            fclose(f);
+            return 0;
+        }
+
+        if (!strcmp(p->b, cpf)) {
+            flag = 1;
+            break;
+        }
+    }
+    free(p);
+    fclose(f);
+
+    return flag;
+}
+
 void inserir_candidato(struct candidato *c[]) {
     FILE *u = fopen("ufs", "rb+"); struct UF *uf[27];
     fseek(u, 0, SEEK_SET);
@@ -104,31 +183,36 @@ void inserir_candidato(struct candidato *c[]) {
             printf("Digite o ANO: ");
             scanf("%d", &c[indice]->ano);
 
-            printf("Digite o NUMERO da UF: ");
+            printf("Digite o NUMERO da UF com dois digitos: ");
             fflush(stdin);
             scanf("%d", &UF);
             int algarismos = verificar_algarismos(UF);
             if (algarismos == 1) {
                 printf("Favor digitar os DOIS numeros da sua UF, ex.: 01, 85\n"); return;
             }
-            flag = find_for_code(uf,UF);
+
+            if (!verificar_v(c[indice]->ano, UF)) {
+                printf("\n\nConjunto Eleicao nao existe\n\n");
+                return;
+            }
+            printf("Conjunto eleicao existe\n\n");
+
+            /*flag = find_for_code(uf,UF);
             if (flag == -1) {
                 printf("UF nao cadastrada!\n");
                 return;
             }
-            c[indice]->UF = UF;
+            c[indice]->UF = UF;*/
 
 
             printf("Digite o CPF do candidato: ");
             fflush(stdin);
-            gets(CPF);
-            int aux = search_by_CPF_Candidato(CPF,c);
-            if (aux != -1) {
-                printf("CPF do candidato ja encontrado!\n");
-                return;
-            }else
-                strcpy(c[indice]->CPF,CPF);
+            gets(c[indice]->CPF);
 
+            if (!verificar_cpf(c[indice]->CPF)) {
+                printf("\n\nPessoa com esse CPF nao existe\n\n");
+                return;
+            }
 
             printf("Digite o numero do candidato(Ex.: 51, 87): ");
             scanf("%d", &numero);
