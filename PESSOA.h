@@ -1,7 +1,8 @@
-
+#define MAX 20
 
 void campo_PESSOA();
 struct PESSOA {
+    int comparecimento;
     int allow;
     char CPF[20];
     char titulo[25];
