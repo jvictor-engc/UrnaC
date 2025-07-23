@@ -22,17 +22,6 @@ void mostrar_todos_UF(struct candidato *c[]) {
         printf("Nao foram cadastrados candidatos nessa UF!\n");
 }
 
-int verificar_algarismos(int numero) {
-    int qtd = 0; int aux = numero;
-    while (aux > 0) {
-        qtd++;
-        aux = aux / 10;
-    }
-    if ((qtd == 1) || (qtd == 2))
-        return 0;
-    else
-        return 1;
-}
 
 
 int search_by_CPF_Candidato(char CPF[20], struct candidato *p[]) {
@@ -106,8 +95,6 @@ int verificar_v(int ano, int code) {
     for (int i = 0 ; 1 ; i++) {
         fseek(E, i * sizeof(struct eleicao), SEEK_SET);
         int count = fread(p, sizeof(struct eleicao), 1, E);
-
-        if (p->a == 0) continue;
 
         if (count == 0) {
             free(p);
@@ -186,10 +173,7 @@ void inserir_candidato(struct candidato *c[]) {
             printf("Digite o NUMERO da UF com dois digitos: ");
             fflush(stdin);
             scanf("%d", &UF);
-            int algarismos = verificar_algarismos(UF);
-            if (algarismos == 1) {
-                printf("Favor digitar os DOIS numeros da sua UF, ex.: 01, 85\n"); return;
-            }
+
 
             if (!verificar_v(c[indice]->ano, UF)) {
                 printf("\n\nConjunto Eleicao nao existe\n\n");
