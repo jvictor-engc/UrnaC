@@ -116,6 +116,7 @@ int verificar_v(int ano, int code) {
 int verificar_cpf(char cpf[]) {
     struct pessoa {
         int a;
+        int x;
         char b[20];
         char c[25];
         char d[50];
@@ -143,6 +144,9 @@ int verificar_cpf(char cpf[]) {
             fclose(f);
             return 0;
         }
+
+        p->b[strcspn(p->b, "\n")] = '\0';
+        cpf[strcspn(cpf, "\n")] = '\0';
 
         if (!strcmp(p->b, cpf)) {
             flag = 1;
@@ -181,17 +185,18 @@ void inserir_candidato(struct candidato *c[]) {
             }
             printf("Conjunto eleicao existe\n\n");
 
-            /*flag = find_for_code(uf,UF);
+            flag = find_for_code(uf,UF);
             if (flag == -1) {
                 printf("UF nao cadastrada!\n");
                 return;
             }
-            c[indice]->UF = UF;*/
+            c[indice]->UF = UF;
 
 
             printf("Digite o CPF do candidato: ");
             fflush(stdin);
-            gets(c[indice]->CPF);
+            fgets(c[indice]->CPF, sizeof(c[indice]->CPF) ,stdin);
+
 
             if (!verificar_cpf(c[indice]->CPF)) {
                 printf("\n\nPessoa com esse CPF nao existe\n\n");
@@ -234,7 +239,7 @@ void inserir_candidato(struct candidato *c[]) {
 
 
 void campo_candidato() {
-    struct candidato *c[10];
+    struct candidato *c[20];
     for (int i = 0; i < 10; i++) {
         c[i]=(struct candidato *)malloc(sizeof(struct candidato));
         c[i]->allow = 0;

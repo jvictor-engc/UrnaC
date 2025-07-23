@@ -186,8 +186,8 @@ void alterar_elc(struct ELEICAO **q) {
 void pesquisar_elc(struct ELEICAO **q) {}//fazer ainda
 
 void campo_ELEICAO() {
-    struct ELEICAO *p[5];
-    for(int i = 0 ; i < 5 ; i++){
+    struct ELEICAO *p[20];
+    for(int i = 0 ; i < 20 ; i++){
         p[i] = malloc(sizeof(struct ELEICAO));
     }//crio um vetor de ponteiro para struct UF e aloco um espaço struc UF para cada ponteiro
 

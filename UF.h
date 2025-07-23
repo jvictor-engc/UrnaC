@@ -11,8 +11,8 @@ struct UF{
 void iniciar_structs();
 int achar_livre();
 void introduzir();
-void find_for_code();
-void find_for_sigla();
+int find_for_code();
+int find_for_sigla();
 void adicionar();
 void pesquisar();
 void adicionar();

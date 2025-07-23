@@ -6,9 +6,9 @@ struct ELEICAO {
 };
 void campo_ELEICAO();
 void iniciar_structs_elc();
-void achar_livre_elc();
-void find_for_struct();
-void verifica_cod_uf();
+int achar_livre_elc();
+int find_for_struct();
+int verifica_cod_uf();
 void adicionar_elc();
 void exluir_elc();
 void mostrar_elc();
