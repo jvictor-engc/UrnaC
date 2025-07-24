@@ -59,14 +59,14 @@ void campo_comparecimento() {
     }
     //aqui criamos um ponteiro para struct PESSOA, que irá receber os dados escritos no arquivo "pessoas",
     //criado na funcao PESSOAS.c
-    struct PESSOA *pessoa[MAX];
-    for (int i = 0; i < MAX; i++) {
+    struct PESSOA *pessoa[MAX_P];
+    for (int i = 0; i < MAX_P; i++) {
         pessoa[i] = malloc(sizeof(struct PESSOA));
         pessoa[i]->comparecimento = 0;
         pessoa[i]->allow = 0;
     }
     fseek(arquivo,0,SEEK_SET);
-    for (int i = 0; i < MAX; i++) {
+    for (int i = 0; i < MAX_P; i++) {
         fread(pessoa[i], sizeof(struct PESSOA), 1, arquivo);
     }
     int choice, flag = 0;
@@ -93,7 +93,7 @@ void campo_comparecimento() {
         }
     }while (!flag);
     fseek(arquivo, 0, SEEK_SET);
-    for (int i = 0; i < MAX; i++) {
+    for (int i = 0; i < MAX_P; i++) {
         fwrite(pessoa[i], sizeof(struct PESSOA), 1, arquivo);
     }
     fclose(arquivo);

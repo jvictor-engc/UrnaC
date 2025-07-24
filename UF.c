@@ -209,7 +209,7 @@ void adicionar(struct UF **q){
 
     //testar se o codigo se repete
     for (int i = 0 ; i < MAX ; i++) {
-        if ((q[i]->alow != 0)&(q[i]->codigo == q[livre]->codigo)){
+        if ((q[i]->alow != 0)&&(q[i]->codigo == q[livre]->codigo)){
             printf("\n\nERRO: O Codigo ja esta em uso\n\n");
             return;
         };
@@ -462,7 +462,7 @@ void alterar(struct UF **q) {
                         scanf("%d", &new_code);
 
                         flag = 0;
-                        for (int i = 0 ; i < MAX & q[i]->alow; i++) {
+                        for (int i = 0 ; i < MAX && q[i]->alow; i++) {
                             if (i == indice) continue;
                             if (q[i]->codigo == new_code) {
                                 flag++;

@@ -1,4 +1,4 @@
-#define MAX 30
+#define MAX_P 30
 
 void campo_PESSOA();
 struct PESSOA {

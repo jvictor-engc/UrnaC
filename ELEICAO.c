@@ -265,8 +265,31 @@ void alterar_elc(struct ELEICAO **q) {
 }
 
 void pesquisar_elc(struct ELEICAO **q) {
+    int year, code;
+    int indice;
 
+    while (1) {
+        printf("-------------------------------------------------------------------------------------\n");
+        printf("Quem voce quer Achar?\n\n");
 
+        printf("Ano: ");
+        scanf("%d", &year);
+
+        printf("Codigo da UF: ");
+        scanf("%d", &code);
+
+        indice = find_for_struct(q, year, code);
+        if (indice == -1) {
+            printf("-------------------------------------------------------------------------------------\n");
+            printf("\n\nSem essa eleicao.\n\n");
+            break;
+        }
+
+        printf("-------------------------------------------------------------------------------------\n");
+        printf("Ano: %d\n", (q[indice]->ano));
+        printf("Codigo UF: %d\n", (q[indice]->codigo_uf));
+        printf("Descricao: %s\n\n", (q[indice]->descricao));
+    }
 }
 
 void campo_ELEICAO() {

@@ -7,6 +7,7 @@ struct candidato {
 };
 
 void campo_candidato();
+void mostrar_todos_ano();
 void mostrar_todos_UF();
 int verificar_algarismos();
 int search_by_CPF_Candidato();

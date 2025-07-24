@@ -13,7 +13,7 @@
 int search_by_CPF(char CPF[20], struct PESSOA *p[]) {
     int counter = 0; int flag = 0; int qts_cadas = 0;
     //quantidade de pessoas cadastradas
-    for (int i = 0; i < MAX; i++) {
+    for (int i = 0; i < MAX_P; i++) {
         if (p[i]->allow == 1) {
             qts_cadas++;
         }
@@ -43,7 +43,7 @@ int search_by_CPF(char CPF[20], struct PESSOA *p[]) {
 //pode-se aplicar a mesma logia da funcao search_CPF para esta, são idênticas
 int search_titulo(char titulo[25], struct PESSOA *p[]) {
     int counter = 0; int flag = 0; int qts_cadas = 0;
-    for (int i = 0; i < MAX; i++) {
+    for (int i = 0; i < MAX_P; i++) {
         if (p[i]->allow == 1) {
             qts_cadas++;
         }
@@ -223,7 +223,7 @@ void remover_pessoa(struct PESSOA *p[]) {
 //funcao para inserir pessoas.
 void inserir_pessoa(struct PESSOA *p[]) {
     int flag = 0;
-    for (int i = 0; i < MAX; i++) {
+    for (int i = 0; i < MAX_P; i++) {
 
 
 
@@ -238,7 +238,7 @@ void inserir_pessoa(struct PESSOA *p[]) {
             fflush(stdin);
             gets(p[i]->CPF);
             //laço para comparar CPFs e verificar se ja foi registrado, o for deve encontrar somente um CPF repetido(que é o próprio digitado), caso tenha mais de um, ele dá erro
-                for (int k = 0; k <= MAX; k++) {
+                for (int k = 0; k <= MAX_P; k++) {
                     if (strcmp(p[i]->CPF, p[k]->CPF) == 0) {
                         flag++;
                     }
@@ -261,7 +261,7 @@ void inserir_pessoa(struct PESSOA *p[]) {
             gets(p[i]->titulo);
 
             //laço para comparar titulos e verificar se ja foi registrado, o for deve encontrar somente um titulo repetido(que é o próprio digitado), caso tenha mais de um, ele dá erro
-                for (int k = 0; k <= MAX; k++) {
+                for (int k = 0; k <= MAX_P; k++) {
                     if (strcmp(p[i]->titulo, p[k]->titulo) == 0) {
                         flag++;
                     }
@@ -307,7 +307,7 @@ void inserir_pessoa(struct PESSOA *p[]) {
 
 //funcao para iniciar os ALLOWs das structs em 0
 void iniciar_pessoas(struct PESSOA *p[]) {
-    for (int i = 0; i < MAX; i++) {
+    for (int i = 0; i < MAX_P; i++) {
         p[i]->allow = 0;
         p[i]->comparecimento = 0;
     }
@@ -316,7 +316,7 @@ void iniciar_pessoas(struct PESSOA *p[]) {
 //funcao para listar todas as pessoas cadastradas, caso nao tenha ninguem cadastrado ele avisa
 void mostrar_todas(struct PESSOA *p[]) {
     int aux = 0;
-    for (int i = 0; i < MAX; i++) {
+    for (int i = 0; i < MAX_P; i++) {
         if (p[i]->allow == 1) {
             printf("--------------------------------\n\n");
             printf("Nome: %s\n", p[i]->nome);
@@ -332,7 +332,7 @@ void mostrar_todas(struct PESSOA *p[]) {
             printf("--------------------------------\n\n");
             }else aux++;
         }
-    if (aux == MAX) printf("Nenhuma pessoa na lista!\n");
+    if (aux == MAX_P) printf("Nenhuma pessoa na lista!\n");
 }
 
 
@@ -340,8 +340,8 @@ void mostrar_todas(struct PESSOA *p[]) {
 
 void campo_PESSOA()
 {
-    struct PESSOA *p[MAX];
-    for(int i = 0 ; i < MAX ; i++) {
+    struct PESSOA *p[MAX_P];
+    for(int i = 0 ; i < MAX_P ; i++) {
         p[i] = (struct PESSOA *)malloc(sizeof(struct PESSOA));
     }
     iniciar_pessoas(p);
@@ -356,7 +356,7 @@ void campo_PESSOA()
 
     //escrever dados do arquivo no vetor
     fseek(f, 0, SEEK_SET);
-    for (int i = 0; i < MAX; i++) {
+    for (int i = 0; i < MAX_P; i++) {
         fread(p[i], sizeof(struct PESSOA), 1, f);
     }
 
@@ -404,7 +404,7 @@ void campo_PESSOA()
 
     //escrever dados salvos das structs no arquivo e depois liberar o malloc
     fseek(f, 0, SEEK_SET);
-    for(int i = 0 ; i < MAX ; i++) {
+    for(int i = 0 ; i < MAX_P ; i++) {
         fwrite(p[i], sizeof(struct PESSOA), 1, f);
         free(p[i]);
     }

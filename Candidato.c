@@ -24,7 +24,7 @@ void mostrar_todos_UF(struct candidato *c[]) {
 
 void mostrar_todos_ano(struct candidato *c[]) {
     int ANO, flag=0;
-    printf("Digite o Ano");
+    printf("Digite o Ano: ");
     scanf("%d", &ANO);
     for (int i = 0; i < 10; i++) {
         if (c[i]->allow == 1 && c[i]->ano == ANO) {
@@ -150,7 +150,7 @@ int verificar_cpf(char cpf[]) {
     if (f == NULL) f = fopen("pessoas", "wb+");
     if (f == NULL) {
         printf("erro ao abrir arquivo, tente novamente\n");
-        return;
+        return 0;
     }
 
     int flag = 0;
@@ -286,8 +286,8 @@ void campo_candidato() {
     do {
         printf("[1]INSERIR Candidato\n");
         printf("[2]EXCLUIR Candidato\n");
-        printf("[3]MOSTRAR todos os Candidatos por UF\n");
-        printf("[4]MOSTRAR todos os Candidatos por ANO\n");
+        printf("[3]MOSTRAR todos os Candidatos por Codigo da UF\n");
+        printf("[4]MOSTRAR todos os Candidatos por ANO \n");
         printf("[5]SAIR & SALVAR\n");
         scanf("%d", &choice);
         switch (choice) {
