@@ -5,6 +5,7 @@
 #include "PESSOA.h"
 #include "ELEICAO.h"
 #include "VOTO.h"
+#include "Comparecimento.h"
 
 // abrir arquivo
 //fazer malloc
@@ -37,6 +38,8 @@ int main(){
             case 4: campo_PESSOA();
                 break;
             case 5: campo_VOTO();
+                break;
+            case 6: campo_comparecimento();
                 break;
             case 7:
                 return 0;
