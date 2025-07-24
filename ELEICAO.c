@@ -14,8 +14,8 @@ void iniciar_structs_elc(struct ELEICAO **q){
 */
 
 void introduzir_elc() {
-    printf("-------------------------------------------------------------------------------------------");
-    printf("\n\nO que deseja fazer?\n\n");
+    printf("----------------------------------------[ELEICOES]---------------------------------------------\n");
+    printf("O que deseja fazer?\n\n");
     printf("[1]Adicionar Eleicao\n");
     printf("[2]Mostrar Eleicao\n");
     printf("[3]Excluir Eleicao\n");
@@ -47,7 +47,7 @@ int find_for_struct(struct ELEICAO **q,int year, int code) {
         }
     }
     return -1;
-}
+}//se achar uma struct com esse ano e codigo, retorna o indice da struct, se não, retorna -1
 
 int verifica_cod_uf(int code) {
     struct uf {
@@ -124,6 +124,7 @@ void adicionar_elc(struct ELEICAO **q){
         if (q[livre]->descricao[i] == '\n') q[livre]->descricao[i] = '\0';
     }
 
+    printf("\n\nEleicao adicionada com sucesso\n\n");
     q[livre]->alow = 2;
 
 }
@@ -132,7 +133,7 @@ void mostrar_elc(struct ELEICAO **q) {
     int flag = 0;
     printf("-------------------------------------------------------------------------------------------");
     for (int i = 0; i < 5; i++){
-        if((q[i]->alow) != 0){
+        if((q[i]->alow != 0) && (q[i]->alow !=3)){
             printf("\nAno: %d\n", (q[i]->ano));
             printf("Codigo UF: %d\n", q[i]->codigo_uf);
             printf("Descricao: %s\n", q[i]->descricao);
@@ -151,6 +152,7 @@ void excluir_elc(struct ELEICAO **q) {
         int indice;
         int escolha;
 
+        printf("-------------------------------------------------------------------------------------\n");
         printf("Quem voce quer excluir?\n\n");
         printf("Digite o Ano:");
         scanf("%d", &year);
@@ -163,6 +165,7 @@ void excluir_elc(struct ELEICAO **q) {
             printf("\nSem essa eleicao.\n");
             return;
         }
+        printf("\n-------------------------------------------------------------------------------------\n");
         printf("Ano: %d\n", (q[indice]->ano));
         printf("Codigo UF: %d\n", (q[indice]->codigo_uf));
         printf("Descricao: %s\n", (q[indice]->descricao));
@@ -172,18 +175,99 @@ void excluir_elc(struct ELEICAO **q) {
         printf("[2]Nao\n");
 
         scanf("%d", &escolha);
-        if (escolha == 1) q[indice]->alow = 0;
-
+        if (escolha == 1) q[indice]->alow = 3;//3 é o estado de apagado
+        printf("\n\nApagado com sucesso!!\n\n");
         return;
     }
 
 }
 
 void alterar_elc(struct ELEICAO **q) {
+    while (1) {
+        int year,code;
+        int indice;
+        int escolha;
 
-}//fazer ainda
+        int new_year, new_code;
+        char new_descricao[20];
+        int new_indice;
 
-void pesquisar_elc(struct ELEICAO **q) {}//fazer ainda
+        printf("-------------------------------------------------------------------------------------\n");
+        printf("Quem voce quer alterar?\n\n");
+
+        printf("Ano: ");
+        scanf("%d", &year);
+
+        printf("Codigo da UF: ");
+        scanf("%d", &code);
+
+        indice = find_for_struct(q, year, code);
+        if (indice == -1) {
+            printf("-------------------------------------------------------------------------------------\n");
+            printf("\n\nSem essa eleicao.\n\n");
+            break;
+        }
+
+        printf("-------------------------------------------------------------------------------------\n");
+        printf("Ano: %d\n", (q[indice]->ano));
+        printf("Codigo UF: %d\n", (q[indice]->codigo_uf));
+        printf("Descricao: %s\n\n", (q[indice]->descricao));
+
+        printf("O que alterar?\n\n");
+        printf("[1]Ano e Codigo\n");
+        printf("[2]Descricao\n");
+        printf("[3]Voltar\n");
+        scanf("%d", &escolha);
+
+        switch (escolha) {
+            case 1:
+                printf("Digite o novo ano: ");
+                scanf("%d", &new_year);
+                printf("Digite o codigo UF: ");
+                scanf("%d", &new_code);
+
+
+                new_indice = find_for_struct(q, new_year, new_code);// se retornar diferente de zero, ele achou uma struct com essa combinacao
+                if ((new_indice != 0) && (new_indice != indice)) {//essa condição garante que não haja duas eleicoes iguais. PODE( 0 e ser igual a ela mesma)
+                    printf("-------------------------------------------------------------------------------------\n");
+                    printf("\nJa existe eleicao com essa combinacao.\n");
+                    return;
+                }
+
+                //caso não entre no if, ele altera normalmente
+                q[indice]->ano = new_year;
+                q[indice]->codigo_uf = new_code;
+
+                printf("-------------------------------------------------------------------------------------\n");
+                printf("\n\nEleicao alterada com sucesso!!\n\n");
+                q[indice]->alow = 2; //torna como alterada
+                break;
+
+            case 2:
+                printf("-------------------------------------------------------------------------------------\n");
+                printf("Digite a nova descricao: ");
+                fflush(stdin);
+                gets(new_descricao);
+
+                strcpy(q[indice]->descricao, new_descricao);
+                printf("-------------------------------------------------------------------------------------\n");
+                printf("\n\nEleicao alterada com sucesso!!\n\n");
+                q[indice]->alow = 2;//torna como alterada
+                break;
+
+            case 3:
+
+                break;
+
+            default: printf("\nOpcao invalida.\n");
+        }
+    }
+}
+
+void pesquisar_elc(struct ELEICAO **q) {
+
+
+}
 
 void campo_ELEICAO() {
     struct ELEICAO *p[20];
@@ -222,10 +306,10 @@ void campo_ELEICAO() {
             case 3: excluir_elc(p);
                 break;
 
-            case 4: //alterar(p);
+            case 4: alterar_elc(p);
                 break;
 
-            case 5: //pesquisar(p);
+            case 5: pesquisar_elc(p);
                 break;
             case 6:
                 fseek(E, 0, SEEK_SET);
@@ -235,10 +319,15 @@ void campo_ELEICAO() {
                         fseek(E, i * sizeof(struct ELEICAO), SEEK_SET);
                         fwrite(p[i], sizeof(struct ELEICAO), 1, E);
                     }
-                    else {
+                    if (p[i]->alow == 3) {
+                        p[i]->alow = 0;//quando salvo deixa de ser tratado como excluído
                         fseek(E, i * sizeof(struct ELEICAO), SEEK_SET);
                         fwrite(p[i], sizeof(struct ELEICAO), 1, E);
                     }
+                    /*else {
+                        fseek(E, i * sizeof(struct ELEICAO), SEEK_SET);
+                        fwrite(p[i], sizeof(struct ELEICAO), 1, E);
+                    }*/
                 }
                 for(int i = 0 ; i < 5 ; i++) free(p[i]);
                 fclose(E);

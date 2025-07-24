@@ -5,6 +5,7 @@
 #include "VOTO.h"
 
 void introduzir_v() {
+    printf("--------------------------------------[VOTOS]-----------------------------------------\n");
     printf("[1]Adicionar Votos\n");
     printf("[2]Mostrar Votos\n");
     printf("[5]Salvar e Voltar\n");

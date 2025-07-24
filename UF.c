@@ -35,8 +35,8 @@ int achar_livre(struct UF **q){
 
 
 void introduzir(){
-    printf("-------------------------------------------------------------------------------------------");
-    printf("\n\nO que deseja fazer?\n\n");
+    printf("-----------------------------------------[UF]--------------------------------------------\n");
+    printf("O que deseja fazer?\n\n");
     printf("[1]Adicionar UFs\n");
     printf("[2]Mostrar UFs\n");
     printf("[3]Excluir UFs\n");

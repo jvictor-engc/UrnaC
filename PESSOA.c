@@ -373,14 +373,14 @@ void campo_PESSOA()
 
     //UI para escolhas
     do {
-        printf("------ATENCAO: Os dados do campo PESSOA so ficarao salvos apos retornar pressionando [6]-----\n");
+        printf("---------------------------------------[PESSOAS]----------------------------------------\n");
         printf("Digite sua opcao para PESSOA:\n");
         printf("[1]Inserir Pessoa\n");
         printf("[2]Remover Pessoa\n");
         printf("[3]Alterar Pessoa\n");
         printf("[4]Mostrar Todas as Pessoas\n");
         printf("[5]Mostrar Uma Pessoa\n");
-        printf("[6] Sair\n");
+        printf("[6] Salvar e Voltar\n");
 
         scanf("%d", &choice);
         switch (choice) {

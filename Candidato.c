@@ -22,6 +22,24 @@ void mostrar_todos_UF(struct candidato *c[]) {
         printf("Nao foram cadastrados candidatos nessa UF!\n");
 }
 
+void mostrar_todos_ano(struct candidato *c[]) {
+    int ANO, flag=0;
+    printf("Digite o Ano");
+    scanf("%d", &ANO);
+    for (int i = 0; i < 10; i++) {
+        if (c[i]->allow == 1 && c[i]->ano == ANO) {
+            printf("----------DADOS DO CANDIDATO [%d]----------\n",flag);
+            printf("CPF: %s\n",c[i]->CPF);
+            printf("ANO: %d\n",c[i]->ano);
+            printf("NUMERO: %d\n",c[i]->numero);
+            printf("-------------------------------------------\n\n");
+            flag++;
+        }
+    }
+    if (flag==0)
+        printf("Nao foram cadastrados candidatos nesse ANO!\n");
+}
+
 
 
 int search_by_CPF_Candidato(char CPF[20], struct candidato *p[]) {
@@ -124,6 +142,7 @@ int verificar_cpf(char cpf[]) {
         char f[100];
         char g[11];
     };
+    //struct modelo pessoas para permitir navergarmos corretamente com o fseek no arquivo pessoas
 
     struct pessoa *p = malloc(sizeof(struct pessoa));
 
@@ -171,19 +190,22 @@ void inserir_candidato(struct candidato *c[]) {
     for (int indice = 0; indice < 10; indice++) {
         int UF; int flag = 0; char CPF[3]; int numero;
         if (c[indice]->allow == 0) {
+            printf("-------------------------------------------------------------------------------------\n");
+            printf("Escolhendo ELEICAO existente.");
+
             printf("Digite o ANO: ");
             scanf("%d", &c[indice]->ano);
 
-            printf("Digite o NUMERO da UF com dois digitos: ");
+            printf("Digite o NUMERO da UF: ");
             fflush(stdin);
             scanf("%d", &UF);
 
 
             if (!verificar_v(c[indice]->ano, UF)) {
-                printf("\n\nConjunto Eleicao nao existe\n\n");
+                printf("\n\nConjunto Eleicao nao existe!\n\n");
                 return;
             }
-            printf("Conjunto eleicao existe\n\n");
+            printf("\n\nConjunto eleicao existe!\n\n");
 
             flag = find_for_code(uf,UF);
             if (flag == -1) {
@@ -279,10 +301,10 @@ void campo_candidato() {
                 mostrar_todos_UF(c);
                 break;
             case 4:
-                //mostrar_todos_ANO();
+                mostrar_todos_ano(c);
                 break;
             case 5: flag++; break;
-                default: printf("DIgite um numero valido!\n"); break;
+                default: printf("Digite um numero valido!\n"); break;
         }
     }while (!flag);
     fseek(f, 0, SEEK_SET);
